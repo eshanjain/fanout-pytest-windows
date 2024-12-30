@@ -1,0 +1,24 @@
+version: 0.2
+
+batch:
+  fast-fail: false
+  build-fanout:
+    parallelism: 2
+    ignore-failure: false
+
+phases:
+  install:
+    commands:
+      - echo 'Installing Python dependencies'
+      - pip install pytest
+  pre_build:
+    commands:
+      - echo 'prebuild'
+  build:
+    commands:
+      - echo 'Running pytest'
+      - rspec --init
+      - codebuild-tests-run --test-command "pytest" --files-search "codebuild-glob-search test_*.py *_test.py" 
+  post_build:
+    commands:
+      - echo "Would deploy here"
